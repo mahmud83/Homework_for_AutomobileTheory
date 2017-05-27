@@ -5,8 +5,10 @@
 * 加速度-Acceleration (du/dt)
 * 旋转质量换算系数-TransParameter
 * 返回罗马数字-Romance
-
-
+* 功率（Tn/9550）-DrivePower
+* 返回罗马数字-Romance
+* Qs燃油消耗率-FuelConsume
+* 滚阻+空阻功率-ResPower
 
 
 
