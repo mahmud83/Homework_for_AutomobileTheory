@@ -1,13 +1,6 @@
 %汽车的行驶加速度曲线
-addpath('C:\Users\Chen\Desktop\汽车理论\Program\core_func\');
-n=600:100:4000;
-i_0=5.83;
-r=0.367;
-K=0.85;
-m=3880;
-G=m*9.8;
-f=0.013;
-CdA=2.77;
+Initialize;
+n=n_min:100:n_max;
 temp_n=n/1000;
 T_tq=-19.313+295.27*temp_n-165.44*temp_n.^2+40.874*temp_n.^3-3.8445*temp_n.^4;
 
