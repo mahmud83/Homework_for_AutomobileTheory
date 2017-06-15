@@ -1,14 +1,7 @@
-%æ±½è½¦åŠŸç‡å¹³è¡¡å›¾
-addpath('C:\Users\Chen\Desktop\æ±½è½¦ç†è®º\Program\core_func\');
 
-m=3880;
-G=m*9.8;
-f=0.013;
-i_0=5.83;
-r=0.367;
-K=0.85;
-CdA=2.77;
-n=600:100:4000;
+%Æû³µ¹¦ÂÊÆ½ºâÍ¼
+Initialize;
+n=n_min:100:n_max;
 temp_n=n/1000;
 T_q=-19.313+295.27*temp_n-165.44*temp_n.^2+40.874*temp_n.^3-3.8445*temp_n.^4;
 i_g=[5.56,2.769,1.644,1.00,0.793];
@@ -23,7 +16,7 @@ plot(u_a,P_res,'r');
 axis([0 120 0 100]);
 end
 gtext('Pf+Pw/K');
-title('æ±½è½¦åŠŸç‡å¹³è¡¡å›¾');
+title('Æû³µ¹¦ÂÊÆ½ºâÍ¼');
 ylabel('Pe / kW');
-xlabel('ua / (kmÂ·h^-1)');
+xlabel('ua / (km¡¤h^-1)');
 

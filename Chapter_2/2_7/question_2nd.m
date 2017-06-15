@@ -1,95 +1,55 @@
-%ç­‰é€Ÿç™¾å…¬é‡Œç‡ƒæ²¹æ¶ˆè€—
-addpath('C:\Users\Chen\Desktop\æ±½è½¦ç†è®º\Program\core_func\');
-m=3880;
-G=m*9.8;
-f=0.013;
-i_0=5.83;
-r=0.367;
-K=0.85;
-CdA=2.77;
+%µÈËÙ°Ù¹«ÀïÈ¼ÓÍÏûºÄ
+Initialize;
+%% ÄâºÏ£º
+n=[815,1207,1614,2012,2603,3006,3403,3804];
+temp_n=n/1000;
+T_tq=-19.313+295.27*temp_n-165.44*temp_n.^2+40.874*temp_n.^3-3.8445*temp_n.^4;
+i_g=[5.56,2.769,1.644,1.00,0.793];
+u_a=zeros(5,length(n));
+P_e=DrivePower(T_tq,n);
+for i=1:5
+u_a(i,:)=DriveSpeed(n,r,i_g(i),i_0);
+end
 B_0=[1326.8,1354.7,1284.4,1122.9,1141.0,1051.2,1233.9,1129.7];
 B_1=[-416.46 -303.98 -189.75 -121.59 -98.893 -73.714 -84.478 -45.291];
 B_2=[72.379 36.657 14.524 7.0035 4.4763 2.8593 2.9788 0.71113];
 B_3=[-5.8629 -2.0553 -0.51184 -0.18517 -0.091077 -0.05138 -0.047449 -0.00075215];
 B_4=[0.17768 0.043072 0.0068164 0.0018555 0.00068906 0.00035032 0.00028230 -0.000038568];
-n=[815,1207,1614,2012,2603,3006,3403,3804];
-%æ€ é€Ÿæ—¶å€™çš„pgï¼š
+b_have_exist=B_0+B_1.*P_e+B_2.*P_e.^2+B_3.*P_e.^3+B_4.*P_e.^4;
+B1=polyfit(u_a(1,:),b_have_exist,3); %¶ÔÓÚÃ¿Ò»¸öµ²Î»
+B2=polyfit(u_a(2,:),b_have_exist,3);
+B3=polyfit(u_a(3,:),b_have_exist,3);
+B4=polyfit(u_a(4,:),b_have_exist,3);
+B5=polyfit(u_a(5,:),b_have_exist,3);
+%% Ëã³öµ¡ËÙÊ±ºòµÄpg
 n_lspeed=400;
 temp_n=n_lspeed/1000;
-T_q_lspeed=-19.313+295.27*temp_n-165.44*temp_n.^2+40.874*temp_n.^3-3.8445*temp_n.^4;%æ€ é€Ÿæ—¶å€™çš„è½¬çŸ©
-P_e_lspeed=DrivePower(T_q_lspeed,n_lspeed);%æ€ é€Ÿæ—¶å€™çš„åŠŸç‡
-%æˆ‘è®¤ä¸ºï¼Œæ‹Ÿåˆçš„åº”è¯¥æ˜¯å®ƒçš„è½¬é€Ÿï¼Œè¦æ±‚å‡º n_lspeed æ—¶å€™å¯¹åº”çš„å‚æ•°ï¼š
-[p0,p1,p2,p3,p4]=drawpoly(n,B_0,B_1,B_2,B_3,B_4);
-B_0_=polyval(p0,n_lspeed,1);
-B_1_=polyval(p1,n_lspeed,1);
-B_2_=polyval(p2,n_lspeed,1);
-B_3_=polyval(p3,n_lspeed,1);
-B_4_=polyval(p4,n_lspeed,1);
-b_lspeed=B_0_+B_1_.*P_e_lspeed+B_2_.*P_e_lspeed.^2+B_3_.*P_e_lspeed.^3+B_4_.*P_e_lspeed.^4;
-pg=P_e_lspeed*b_lspeed/(367.1*0.299);
-
-%æœ€é«˜æŒ¡&æ­¤é«˜
-i_g=[5.56,2.769,1.644,1.00,0.793];
+T_q_lspeed=-19.313+295.27*temp_n-165.44*temp_n.^2+40.874*temp_n.^3-3.8445*temp_n.^4;%µ¡ËÙÊ±ºòµÄ×ª¾Ø
+P_e_lspeed=DrivePower(T_q_lspeed,n_lspeed);%µ¡ËÙÊ±ºòµÄ¹¦ÂÊ
+temp_u_a=DriveSpeed(n_lspeed,r,i_g(1),i_0);
+b_lspeed=polyval(B1,temp_u_a);
+%pg=P_e_lspeed*b_lspeed/(367.1*0.299);
+pg=7.05;
+%% ËãµÚËÄµµºÍµÚÎåµµ£º
 for i=4:length(i_g)
+    B=0;
+    if (i==4)
+        B=B4;
+    else
+        B=B5;
+    end
 n_=600:100:4000;
 u_a=DriveSpeed(n_,r,i_g(i),i_0);
-B_0_=polyval(p0,n_,1);
-B_1_=polyval(p1,n_,1);
-B_2_=polyval(p2,n_,1);
-B_3_=polyval(p3,n_,1);
-B_4_=polyval(p4,n_,1);
-b=B_0_+B_1_.*P_e_lspeed+B_2_.*P_e_lspeed.^2+B_3_.*P_e_lspeed.^3+B_4_.*P_e_lspeed.^4;
 temp_n=n_/1000;
-T_q=-19.313+295.27*temp_n-165.44*temp_n.^2+40.874*temp_n.^3-3.8445*temp_n.^4;%æ€ é€Ÿæ—¶å€™çš„è½¬çŸ©
-P_e=DrivePower(T_q,n_);
-Q_s=FuelConsume(P_e,b,u_a,pg);
+T_q=-19.313+295.27*temp_n-165.44*temp_n.^2+40.874*temp_n.^3-3.8445*temp_n.^4;%µ¡ËÙÊ±ºòµÄ×ª¾Ø
+P_res=ResPower(G,f,u_a,CdA,K);
+b=polyval(B,u_a);
+Q_s=FuelConsume(P_res,b,u_a,pg);
 hold on;
 plot(u_a,Q_s);
 gtext(Romance(i));
 end
-title('æ±½è½¦ç­‰é€Ÿç™¾å…¬é‡Œç‡ƒæ²¹æ¶ˆè€—é‡æ›²çº¿');
+title('Æû³µµÈËÙ°Ù¹«ÀïÈ¼ÓÍÏûºÄÁ¿ÇúÏß');
 ylabel('Qs / L/100km');
-xlabel('ua / (kmÂ·h^-1)');
+xlabel('ua / (km¡¤h^-1)');
 
-function [p0,p1,p2,p3,p4]=drawpoly(n,B_0,B_1,B_2,B_3,B_4)
-% hold on;
-% plot(n,B_0);
-% gtext('B0');
-% plot(n,B_1);
-% gtext('B1');
-% plot(n,B_2);
-% gtext('B2');
-% plot(n,B_3);
-% gtext('B3');
-% plot(n,B_4);
-% gtext('B4');
-p0=polyfit(n,B_0,2);
-p1=polyfit(n,B_1,1);
-p2=polyfit(n,B_2,1);
-p3=polyfit(n,B_3,1);
-p4=polyfit(n,B_4,1);
-% B_0_=polyval(p0,n,1);
-% B_1_=polyval(p1,n,1);
-% B_2_=polyval(p2,n,1);
-% B_3_=polyval(p3,n,1);
-% B_4_=polyval(p4,n,1);
-% plot(n,B_0_);
-% gtext('B0æ‹Ÿåˆ');
-% plot(n,B_1_);
-% gtext('B1æ‹Ÿåˆ');
-% plot(n,B_2_);
-% gtext('B2æ‹Ÿåˆ');
-% plot(n,B_3_);
-% gtext('B3æ‹Ÿåˆ');
-% plot(n,B_4_);
-% gtext('B4æ‹Ÿåˆ');
-% title('å„å‚æ•°æ‹Ÿåˆæ›²çº¿å›¾');
-% xlabel('n / r/min');
-% ylabel('Bå‚æ•°æ•°å€¼');
-%è¿”å›
-% B_0_=polyval(p0,n_dst,1);
-% B_1_=polyval(p1,n_dst,1);
-% B_2_=polyval(p2,n_dst,1);
-% B_3_=polyval(p3,n_dst,1);
-% B_4_=polyval(p4,n_dst,1);
-end
